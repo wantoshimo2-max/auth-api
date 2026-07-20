@@ -2,7 +2,6 @@ import express from 'express';
 import ClientError from '../../Commons/exceptions/ClientError.js';
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator.js';
 import users from '../../Interfaces/http/api/users/index.js';
-import authentications from '../../Interfaces/http/api/authentications/index.js';
 
 const createServer = async (container) => {
   const app = express();
@@ -10,13 +9,9 @@ const createServer = async (container) => {
   app.use(express.json());
 
   app.use('/users', users(container));
-  app.use('/authentications', authentications(container));
 
-  app.use((req, res) => {
-    res.status(404).json({
-      status: 'fail',
-      message: 'resource not found',
-    });
+  app.get('/', (req, res) => {
+    res.status(200).json({ data: 'Hello world!' });
   });
 
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
@@ -29,8 +24,6 @@ const createServer = async (container) => {
       });
       return;
     }
-
-    console.error(err);
 
     res.status(500).json({
       status: 'error',
