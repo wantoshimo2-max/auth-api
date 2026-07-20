@@ -27,6 +27,20 @@ describe('HTTP server', () => {
     expect(response.status).toEqual(404);
   });
 
+  describe('when GET /', () => {
+    it('should return 200 and hello world', async () => {
+      // Arrange
+      const app = await createServer({});
+
+      // Action
+      const response = await request(app).get('/');
+
+      // Assert
+      expect(response.status).toEqual(200);
+      expect(response.body.data).toEqual('Hello world!');
+    });
+  });
+
   describe('when POST /users', () => {
     it('should response 201 and persisted user', async () => {
       // Arrange
@@ -203,8 +217,8 @@ describe('HTTP server', () => {
 
       // Action
       const response = await request(app)
-          .post('/users')
-          .send(requestPayload);
+        .post('/users')
+        .send(requestPayload);
 
       // Assert
       expect(response.status).toEqual(401);
@@ -212,10 +226,10 @@ describe('HTTP server', () => {
       expect(response.body.message).toEqual('kredensial yang Anda masukkan salah');
     });
 
-      // Assert
-      expect(response.status).toEqual(400);
-      expect(response.body.status).toEqual('fail');
-      expect(response.body.message).toEqual('username tidak tersedia');
+    // Assert
+    expect(response.status).toEqual(400);
+    expect(response.body.status).toEqual('fail');
+    expect(response.body.message).toEqual('username tidak tersedia');
     it('should response 400 if login payload not contain needed property', async () => {
       const requestPayload = {
         username: 'dicoding',
